@@ -1,0 +1,19 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10     
+  pre_build:
+    commands:
+      - cd dependencies/nodejs
+      - npm install
+      - cd ../..
+  build:
+    commands:
+      - export BUCKET=<insert-bucket-name>
+      - aws cloudformation package --template-file template.yaml --s3-bucket $BUCKET --output-template-file outputtemplate.yaml
+artifacts:
+  type: zip
+  files:
+    - template.yaml
+    - outputtemplate.yaml
